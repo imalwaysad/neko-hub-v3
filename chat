@@ -1,17 +1,22 @@
-local message = [[made by Neko Hub,. ٜ.ǥǥ⸝Ƈ❷ḢɈḣẆḞ৭ƙƙ]]
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+MainTab:CreateButton("Send Credit Message", function()
+    local message = "Made by Neko Hub V3, .ǥǥ⸝Ƈ❷ḢɈḣẆḞ৭ƙƙ"
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local function say()
-    local char = player and player.Character
-    if not char then return end
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        pcall(function() humanoid:Chat(message) end)
+    local ok, events = pcall(function()
+        return ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents", 5)
+    end)
+
+    if ok and events and events:FindFirstChild("SayMessageRequest") then
+        -- sends via default chat (shows in global chat)
+        pcall(function() events.SayMessageRequest:FireServer(message, "All") end)
+    else
+        -- fallback: local humanoid chat (visible to nearby players)
+        local plr = Players.LocalPlayer
+        if plr and plr.Character then
+            local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                pcall(function() humanoid:Chat(message) end)
+            end
+        end
     end
-end
-
-if player then
-    if player.Character then say() end
-    player.CharacterAdded:Connect(say)
-end
+end)
