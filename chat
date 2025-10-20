@@ -1,0 +1,17 @@
+local message = [[made by Neko Hub,. ٜ.ǥǥ⸝Ƈ❷ḢɈḣẆḞ৭ƙƙ]]
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function say()
+    local char = player and player.Character
+    if not char then return end
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        pcall(function() humanoid:Chat(message) end)
+    end
+end
+
+if player then
+    if player.Character then say() end
+    player.CharacterAdded:Connect(say)
+end
